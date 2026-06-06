@@ -32,6 +32,11 @@ export async function listProducts(query = '') {
 export async function upsertProduct(product: Partial<Product>) {
   const db = await database();
   const id = String(product.id || uuid());
+  const syncPayload = {
+    ...product,
+    id,
+    image: typeof product.image === 'string' && product.image.startsWith('data:image/') ? null : product.image,
+  };
   await db.runAsync(
     `INSERT OR REPLACE INTO products
     (id, remote_id, shop, name, category, price, stock, low_stock_threshold, image, is_active, updated_at)
@@ -50,7 +55,7 @@ export async function upsertProduct(product: Partial<Product>) {
       new Date().toISOString(),
     ],
   );
-  await enqueue('product', id, product.remote_id ? 'UPDATE' : 'CREATE', { ...product, id });
+  await enqueue('product', id, product.remote_id ? 'UPDATE' : 'CREATE', syncPayload);
 }
 
 export async function adjustStock(productId: string | number, quantity: number, action: 'ADD' | 'REDUCE' | 'ADJUST', note = '') {

@@ -54,6 +54,10 @@ export default function ProductFormScreen() {
       Alert.alert('Invalid threshold', 'Low stock threshold must be zero or higher.');
       return;
     }
+    if (image.trim() && !isSupportedImageReference(image.trim())) {
+      Alert.alert('Invalid image', 'Use an http(s) image URL or choose an image from your device.');
+      return;
+    }
     await upsertProduct({
       name: name.trim(),
       category: category.trim() || 'General',
@@ -97,6 +101,10 @@ export default function ProductFormScreen() {
       </ScrollView>
     </Screen>
   );
+}
+
+function isSupportedImageReference(value: string) {
+  return value.startsWith('data:image/') || value.startsWith('http://') || value.startsWith('https://');
 }
 
 const styles = StyleSheet.create({
