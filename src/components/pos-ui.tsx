@@ -74,8 +74,8 @@ export function Button({
   disabled = false,
 }: PropsWithChildren<{ onPress?: () => void; variant?: 'primary' | 'secondary' | 'ghost' | 'danger'; size?: 'default' | 'compact'; disabled?: boolean }>) {
   return (
-    <Pressable onPress={onPress} disabled={disabled} style={[styles.button, styles[size], styles[variant], disabled && styles.disabled]}>
-      <Text style={[styles.buttonText, (variant === 'ghost' || variant === 'secondary') && styles.darkButtonText]}>{children}</Text>
+    <Pressable onPress={onPress} disabled={disabled} style={StyleSheet.flatten([styles.button, styles[size], styles[variant], disabled && styles.disabled])}>
+      <Text style={StyleSheet.flatten([styles.buttonText, (variant === 'ghost' || variant === 'secondary') && styles.darkButtonText])}>{children}</Text>
     </Pressable>
   );
 }
@@ -110,9 +110,9 @@ function Sidebar({ onNavigate, compactClose }: { onNavigate?: () => void; compac
           const active = pathname === item.href || (item.href !== '/' && pathname.startsWith(String(item.href)));
           return (
             <Link key={String(item.href)} href={item.href} asChild>
-              <Pressable onPress={onNavigate} style={[styles.navItem, active && styles.navItemActive]}>
-                <Text style={[styles.navLabel, active && styles.navLabelActive]}>{item.label}</Text>
-                <Text style={[styles.navMeta, active && styles.navMetaActive]}>{item.meta}</Text>
+              <Pressable onPress={onNavigate} style={StyleSheet.flatten([styles.navItem, active && styles.navItemActive])}>
+                <Text style={StyleSheet.flatten([styles.navLabel, active && styles.navLabelActive])}>{item.label}</Text>
+                <Text style={StyleSheet.flatten([styles.navMeta, active && styles.navMetaActive])}>{item.meta}</Text>
               </Pressable>
             </Link>
           );
