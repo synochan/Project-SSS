@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Button, Field, H1, Screen } from '@/components/pos-ui';
+import { Button, Field, H1, palette, Screen } from '@/components/pos-ui';
 import { createOfflineSale } from '@/database/repositories';
 import { processSyncQueue } from '@/services/sync-engine';
 import { useCartStore } from '@/store/cart-store';
@@ -51,8 +51,8 @@ export default function CheckoutScreen() {
 
 const styles = StyleSheet.create({
   content: { gap: 12 },
-  row: { backgroundColor: 'white', borderRadius: 8, padding: 12, borderWidth: 1, borderColor: '#e1e7ef', flexDirection: 'row', justifyContent: 'space-between' },
-  name: { color: '#17202a', fontWeight: '700' },
-  total: { color: '#0f7b6c', fontWeight: '900', fontSize: 28, textAlign: 'right' },
-  actions: { flexDirection: 'row', gap: 8 },
+  row: { backgroundColor: palette.surface, borderRadius: 8, padding: 12, borderWidth: 1, borderColor: palette.line, flexDirection: 'row', justifyContent: 'space-between', gap: 12 },
+  name: { color: palette.ink, fontWeight: '800' },
+  total: { color: palette.primaryDark, fontWeight: '900', fontSize: 28, textAlign: 'right' },
+  actions: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
 });

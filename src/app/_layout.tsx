@@ -20,7 +20,7 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
-        <Stack screenOptions={{ headerStyle: { backgroundColor: '#0f7b6c' }, headerTintColor: '#fff' }}>
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#f5f5f2' } }}>
           <Stack.Screen name="index" options={{ title: 'CashTrack POS' }} />
           <Stack.Screen name="login" options={{ title: 'Login' }} />
           <Stack.Screen name="register" options={{ title: 'Register' }} />

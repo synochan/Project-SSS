@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'expo-router';
 import { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
-import { Button, Field, H1, Screen } from '@/components/pos-ui';
+import { Button, Field, H1, palette, Screen } from '@/components/pos-ui';
 import { listProducts } from '@/database/repositories';
 import { money } from '@/utils/money';
 
@@ -23,9 +23,9 @@ export default function ProductsScreen() {
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (
           <View style={styles.row}>
-            <View>
+            <View style={styles.copy}>
               <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.meta}>{item.category} • Stock {item.stock}</Text>
+              <Text style={styles.meta}>{item.category} - Stock {item.stock}</Text>
               {item.stock <= item.low_stock_threshold && <Text style={styles.warning}>Low stock</Text>}
             </View>
             <Text style={styles.price}>{money(item.price)}</Text>
@@ -37,11 +37,21 @@ export default function ProductsScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
   list: { gap: 10, paddingBottom: 30 },
-  row: { backgroundColor: 'white', borderRadius: 8, padding: 14, borderWidth: 1, borderColor: '#e1e7ef', flexDirection: 'row', justifyContent: 'space-between', gap: 12 },
-  name: { color: '#17202a', fontWeight: '800', fontSize: 16 },
-  meta: { color: '#607080', marginTop: 4 },
-  warning: { color: '#b42318', marginTop: 4, fontWeight: '700' },
-  price: { color: '#0f7b6c', fontWeight: '800' },
+  row: {
+    backgroundColor: palette.surface,
+    borderRadius: 8,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: palette.line,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  copy: { flex: 1, minWidth: 0 },
+  name: { color: palette.ink, fontWeight: '900', fontSize: 16 },
+  meta: { color: palette.muted, marginTop: 4 },
+  warning: { color: palette.danger, marginTop: 4, fontWeight: '800' },
+  price: { color: palette.primaryDark, fontWeight: '900' },
 });

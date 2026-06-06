@@ -1,6 +1,6 @@
 import { Link, useLocalSearchParams } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button, H1, Screen } from '@/components/pos-ui';
+import { Button, H1, palette, Screen } from '@/components/pos-ui';
 import { money } from '@/utils/money';
 
 export default function ReceiptScreen() {
@@ -25,8 +25,8 @@ export default function ReceiptScreen() {
 }
 
 const styles = StyleSheet.create({
-  receipt: { backgroundColor: 'white', borderRadius: 8, padding: 18, borderWidth: 1, borderColor: '#e1e7ef', gap: 8 },
-  label: { color: '#687789', fontSize: 12, marginTop: 8 },
-  value: { color: '#17202a', fontWeight: '700', fontSize: 16 },
-  total: { color: '#0f7b6c', fontWeight: '900', fontSize: 28 },
+  receipt: { backgroundColor: palette.surface, borderRadius: 8, padding: 18, borderWidth: 1, borderColor: palette.line, gap: 8 },
+  label: { color: palette.muted, fontSize: 12, marginTop: 8, fontWeight: '700' },
+  value: { color: palette.ink, fontWeight: '800', fontSize: 16 },
+  total: { color: palette.primaryDark, fontWeight: '900', fontSize: 28 },
 });

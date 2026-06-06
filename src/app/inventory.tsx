@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
-import { Button, Field, H1, Screen } from '@/components/pos-ui';
+import { Button, Field, H1, palette, Screen } from '@/components/pos-ui';
 import { adjustStock, listProducts } from '@/database/repositories';
 
 export default function InventoryScreen() {
@@ -9,8 +9,14 @@ export default function InventoryScreen() {
   const [amounts, setAmounts] = useState<Record<string, string>>({});
 
   async function adjust(id: string | number, mode: 'ADD' | 'REDUCE') {
+    const quantity = Number(amounts[String(id)]);
+    if (!Number.isFinite(quantity) || quantity <= 0) {
+      Alert.alert('Quantity required', 'Enter a quantity greater than zero.');
+      return;
+    }
     try {
-      await adjustStock(id, Number(amounts[String(id)] || 0), mode, 'Manual inventory adjustment');
+      await adjustStock(id, quantity, mode, 'Manual inventory adjustment');
+      setAmounts((state) => ({ ...state, [String(id)]: '' }));
       await refetch();
     } catch (error) {
       Alert.alert('Inventory error', error instanceof Error ? error.message : 'Could not adjust stock.');
@@ -44,10 +50,10 @@ export default function InventoryScreen() {
 
 const styles = StyleSheet.create({
   list: { gap: 10, paddingBottom: 30 },
-  row: { backgroundColor: 'white', borderRadius: 8, padding: 14, borderWidth: 1, borderColor: '#e1e7ef', gap: 10 },
+  row: { backgroundColor: palette.surface, borderRadius: 8, padding: 14, borderWidth: 1, borderColor: palette.line, gap: 10 },
   titleRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 10 },
-  name: { color: '#17202a', fontWeight: '800', fontSize: 16 },
-  stock: { color: '#0f7b6c', fontWeight: '700' },
-  out: { color: '#b42318' },
+  name: { color: palette.ink, fontWeight: '900', fontSize: 16 },
+  stock: { color: palette.success, fontWeight: '800' },
+  out: { color: palette.danger },
   actions: { flexDirection: 'row', gap: 10 },
 });

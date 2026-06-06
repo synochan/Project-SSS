@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'expo-router';
 import { useEffect } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { Body, Button, H1, H2, Screen, Stat } from '@/components/pos-ui';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Body, Button, H1, H2, palette, Screen, Stat } from '@/components/pos-ui';
 import { dashboardStats } from '@/database/repositories';
 import { processSyncQueue } from '@/services/sync-engine';
 import { useAuthStore } from '@/store/auth-store';
@@ -26,6 +26,14 @@ export default function HomeScreen() {
         <View>
           <H1>CashTrack POS</H1>
           <Body>{user ? `${user.first_name || user.username} is signed in` : 'Offline demo mode is ready'}</Body>
+        </View>
+        <View style={styles.heroBand}>
+          <View style={styles.heroCopy}>
+            <Text style={styles.heroKicker}>Today</Text>
+            <Text style={styles.heroAmount}>{money(data?.todays_sales || 0)}</Text>
+            <Body>{data?.todays_transactions || 0} transactions recorded</Body>
+          </View>
+          <Link href="/pos" asChild><Button>Open POS</Button></Link>
         </View>
         <View style={styles.stats}>
           <Stat label="Today's Sales" value={money(data?.todays_sales || 0)} />
@@ -52,7 +60,11 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   content: { gap: 16, paddingBottom: 24 },
+  heroBand: { backgroundColor: palette.secondary, borderRadius: 8, padding: 16, gap: 14 },
+  heroCopy: { gap: 4 },
+  heroKicker: { color: palette.tertiary, fontWeight: '900', fontSize: 12, textTransform: 'uppercase' },
+  heroAmount: { color: '#fffaf2', fontSize: 34, fontWeight: '900' },
   stats: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  panel: { backgroundColor: 'white', borderRadius: 8, padding: 14, borderWidth: 1, borderColor: '#e1e7ef', gap: 8 },
+  panel: { backgroundColor: palette.surface, borderRadius: 8, padding: 14, borderWidth: 1, borderColor: palette.line, gap: 8 },
   grid: { gap: 10 },
 });

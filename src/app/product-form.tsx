@@ -12,11 +12,18 @@ export default function ProductFormScreen() {
   const [threshold, setThreshold] = useState('5');
 
   async function submit() {
-    if (!name || Number(price) < 0 || Number(stock) < 0) {
+    const parsedPrice = Number(price);
+    const parsedStock = Number(stock);
+    const parsedThreshold = Number(threshold);
+    if (!name.trim() || !price.trim() || !stock.trim() || !Number.isFinite(parsedPrice) || parsedPrice < 0 || !Number.isFinite(parsedStock) || parsedStock < 0) {
       Alert.alert('Invalid product', 'Name, price, and non-negative stock are required.');
       return;
     }
-    await upsertProduct({ name, category, price: Number(price), stock: Number(stock), low_stock_threshold: Number(threshold), shop: 1, is_active: true });
+    if (!Number.isFinite(parsedThreshold) || parsedThreshold < 0) {
+      Alert.alert('Invalid threshold', 'Low stock threshold must be zero or higher.');
+      return;
+    }
+    await upsertProduct({ name: name.trim(), category: category.trim() || 'General', price: parsedPrice, stock: parsedStock, low_stock_threshold: parsedThreshold, shop: 1, is_active: true });
     router.replace('/products');
   }
 

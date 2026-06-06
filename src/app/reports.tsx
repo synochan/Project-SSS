@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { View, StyleSheet } from 'react-native';
-import { Body, H1, H2, Screen, Stat } from '@/components/pos-ui';
+import { Body, H1, H2, palette, Screen, Stat } from '@/components/pos-ui';
 import { dashboardStats, listProducts } from '@/database/repositories';
 import { money } from '@/utils/money';
 
@@ -33,5 +33,5 @@ export default function ReportsScreen() {
 
 const styles = StyleSheet.create({
   stats: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  panel: { backgroundColor: 'white', borderRadius: 8, padding: 14, borderWidth: 1, borderColor: '#e1e7ef', gap: 8 },
+  panel: { backgroundColor: palette.surface, borderRadius: 8, padding: 14, borderWidth: 1, borderColor: palette.line, gap: 8 },
 });

@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { Text, View, StyleSheet } from 'react-native';
-import { Button, H1, Screen } from '@/components/pos-ui';
+import { Button, H1, palette, Screen } from '@/components/pos-ui';
 import { useAuthStore } from '@/store/auth-store';
 
 export default function ProfileScreen() {
@@ -26,7 +26,7 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  panel: { backgroundColor: 'white', borderRadius: 8, padding: 14, borderWidth: 1, borderColor: '#e1e7ef', gap: 6 },
-  name: { color: '#17202a', fontWeight: '900', fontSize: 20 },
-  meta: { color: '#607080' },
+  panel: { backgroundColor: palette.surface, borderRadius: 8, padding: 14, borderWidth: 1, borderColor: palette.line, gap: 6 },
+  name: { color: palette.ink, fontWeight: '900', fontSize: 20 },
+  meta: { color: palette.muted },
 });
