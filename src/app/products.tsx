@@ -1,20 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'expo-router';
 import { useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
-import { Button, Field, H1, palette, Screen } from '@/components/pos-ui';
+import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { Body, Button, Field, H1, palette, Screen } from '@/components/pos-ui';
 import { listProducts } from '@/database/repositories';
+import { useAuthStore } from '@/store/auth-store';
 import { money } from '@/utils/money';
 
 export default function ProductsScreen() {
   const [query, setQuery] = useState('');
+  const user = useAuthStore((state) => state.user);
+  const canManageProducts = !user || user.role === 'OWNER';
   const { data = [], refetch } = useQuery({ queryKey: ['products', query], queryFn: () => listProducts(query) });
 
   return (
     <Screen>
       <View style={styles.header}>
-        <H1>Products</H1>
-        <Link href="/product-form" asChild><Button>Add</Button></Link>
+        <View>
+          <H1>Products</H1>
+          {!canManageProducts && <Body>Cashier view</Body>}
+        </View>
+        {canManageProducts && <Link href="/product-form" asChild><Button>Add</Button></Link>}
       </View>
       <Field value={query} onChangeText={setQuery} placeholder="Search products" onSubmitEditing={() => refetch()} />
       <FlatList
@@ -23,6 +29,13 @@ export default function ProductsScreen() {
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (
           <View style={styles.row}>
+            {item.image ? (
+              <Image source={{ uri: item.image }} style={styles.thumbnail} />
+            ) : (
+              <View style={styles.thumbnailFallback}>
+                <Text style={styles.thumbnailText}>{item.name.slice(0, 1).toUpperCase()}</Text>
+              </View>
+            )}
             <View style={styles.copy}>
               <Text style={styles.name}>{item.name}</Text>
               <Text style={styles.meta}>{item.category} - Stock {item.stock}</Text>
@@ -49,7 +62,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 12,
   },
-  copy: { flex: 1, minWidth: 0 },
+  thumbnail: { width: 58, height: 58, borderRadius: 8, backgroundColor: palette.surfaceMuted },
+  thumbnailFallback: {
+    width: 58,
+    height: 58,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: palette.surfaceMuted,
+    borderWidth: 1,
+    borderColor: palette.line,
+  },
+  thumbnailText: { color: palette.primaryDark, fontWeight: '900', fontSize: 20 },
+  copy: { flex: 1, minWidth: 0, justifyContent: 'center' },
   name: { color: palette.ink, fontWeight: '900', fontSize: 16 },
   meta: { color: palette.muted, marginTop: 4 },
   warning: { color: palette.danger, marginTop: 4, fontWeight: '800' },

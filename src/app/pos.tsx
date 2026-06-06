@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'expo-router';
 import { useState } from 'react';
-import { FlatList, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { FlatList, Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { Body, Button, Field, H1, H2, palette, Screen } from '@/components/pos-ui';
 import { listProducts } from '@/database/repositories';
 import { useCartStore } from '@/store/cart-store';
@@ -37,6 +37,13 @@ export default function POSScreen() {
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (
           <View style={styles.product}>
+            {item.image ? (
+              <Image source={{ uri: item.image }} style={styles.productImage} />
+            ) : (
+              <View style={styles.productImageFallback}>
+                <Text style={styles.productImageText}>{item.name.slice(0, 1).toUpperCase()}</Text>
+              </View>
+            )}
             <Text style={styles.name}>{item.name}</Text>
             <Text style={styles.meta}>{money(item.price)}</Text>
             <Text style={styles.meta}>Stock {item.stock}</Text>
@@ -73,6 +80,17 @@ const styles = StyleSheet.create({
   list: { gap: 10, paddingBottom: 12 },
   columns: { gap: 10 },
   product: { flex: 1, backgroundColor: palette.surface, borderRadius: 8, padding: 12, borderWidth: 1, borderColor: palette.line, gap: 8 },
+  productImage: { width: '100%', height: 118, borderRadius: 8, backgroundColor: palette.surfaceMuted },
+  productImageFallback: {
+    height: 118,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: palette.surfaceMuted,
+    borderWidth: 1,
+    borderColor: palette.line,
+  },
+  productImageText: { color: palette.primaryDark, fontSize: 28, fontWeight: '900' },
   name: { color: palette.ink, fontWeight: '900', fontSize: 16 },
   meta: { color: palette.muted },
   price: { color: palette.primaryDark, fontWeight: '900' },
